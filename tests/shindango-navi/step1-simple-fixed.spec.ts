@@ -10,8 +10,10 @@ test('Step 1: Kiểm tra hiển thị và hoạt động của câu hỏi, câu 
   // Đợi thêm để trang load đầy đủ
   await page.waitForTimeout(3000);
 
-  // Kiểm tra câu hỏi hiển thị đúng - chỉ kiểm tra một phần của text
-  const question = page.getByText('あなたは診断を受けた');
+  // Kiểm tra câu hỏi hiển thị đúng và đầy đủ text
+  const questionFullText = `あなたは診断を受けたご本人ですか、
+それともご家族・支援者ですか？`;
+  const question = page.getByText(questionFullText);
   await expect(question).toBeVisible({ timeout: 15000 });
 
   // Kiểm tra các câu trả lời hiển thị đúng
