@@ -22,9 +22,22 @@ test('Step 1: Kiểm tra hiển thị và hoạt động của câu hỏi, câu 
   await expect(answer1).toBeVisible({ timeout: 10000 });
   await expect(answer2).toBeVisible({ timeout: 10000 });
 
-  // Kiểm tra nút "Next" hiển thị
+  // Kiểm tra nút "Next" hiển thị và kiểm tra trạng thái disable thực sự
   const nextButton = page.getByRole('button', { name: '次へ進む' });
   await expect(nextButton).toBeVisible({ timeout: 10000 });
+  
+  // Kiểm tra nút Next ban đầu có thể click được hay không
+  // Cách 1: Kiểm tra class CSS
+  await expect(nextButton).toHaveClass(/cursor-not-allowed/);
+  
+  // Cách 2: Thử click và kiểm tra xem có chuyển trang không
+  const currentUrl = page.url();
+  await nextButton.click({ force: true }); // Force click để test
+  await page.waitForTimeout(1000);
+  const urlAfterClick = page.url();
+  
+  // Nếu button thực sự disable, URL không đổi
+  expect(currentUrl).toBe(urlAfterClick);
 
   // Chọn câu trả lời đầu tiên
   await answer1.click();
