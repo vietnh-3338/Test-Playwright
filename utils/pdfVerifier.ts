@@ -28,47 +28,47 @@ export class PdfVerifier {
     }
     
     await download.saveAs(filepath);
-    console.log(`    ✓ PDF saved to: ${filepath}`);
+
     
     return filepath;
   }
 
   // Verify PDF file exists and is valid
   async verifyPdfFile(filepath: string): Promise<void> {
-    console.log(`  - Verifying PDF file: ${filepath}`);
+
     
     // Check file exists
     expect(fs.existsSync(filepath)).toBe(true);
-    console.log(`    ✓ PDF file exists`);
+
     
     // Check file size (should be > 0)
     const stats = fs.statSync(filepath);
     expect(stats.size).toBeGreaterThan(0);
-    console.log(`    ✓ PDF file size: ${stats.size} bytes`);
+
     
     // Check file is actually a PDF (starts with %PDF)
     const buffer = fs.readFileSync(filepath);
     const header = buffer.toString('ascii', 0, 4);
     expect(header).toBe('%PDF');
-    console.log(`    ✓ PDF file has valid header`);
+
   }
 
   // Extract text from PDF for verification (basic approach)
   async extractPdfText(filepath: string): Promise<string> {
-    console.log(`  - Extracting text from PDF: ${filepath}`);
+
     
     // For basic text extraction, we'll read raw PDF content
     // In a real scenario, you might want to use pdf-parse or pdf2pic library
     const buffer = fs.readFileSync(filepath);
     const pdfText = buffer.toString('binary');
     
-    console.log(`    ✓ PDF text extracted (${pdfText.length} characters)`);
+
     return pdfText;
   }
 
   // Verify contact information exists in PDF
   async verifyContactInfoInPdf(filepath: string, expectedInfo: PdfContactInfo): Promise<void> {
-    console.log(`  - Verifying contact information in PDF...`);
+
     
     const pdfText = await this.extractPdfText(filepath);
     
@@ -76,29 +76,29 @@ export class PdfVerifier {
     const searchableText = this.normalizeTextForSearch(pdfText);
     
     // Verify government office information
-    console.log(`    Checking government office info:`);
-    console.log(`      Address: ${expectedInfo.governmentOfficeAddress}`);
-    console.log(`      Phone: ${expectedInfo.governmentOfficePhone}`);
+
+
+
     
     const govAddressFound = this.findTextInPdf(searchableText, expectedInfo.governmentOfficeAddress);
     const govPhoneFound = this.findTextInPdf(searchableText, expectedInfo.governmentOfficePhone);
     
     if (!govAddressFound) {
-      console.log(`    ❌ Government office address not found in PDF`);
+
       // For development, let's be lenient and log partial matches
       const addressParts = expectedInfo.governmentOfficeAddress.split(' ');
       for (const part of addressParts) {
         if (part.length > 3) { // Skip short words
           const partFound = this.findTextInPdf(searchableText, part);
-          console.log(`        Partial match "${part}": ${partFound}`);
+
         }
       }
     } else {
-      console.log(`    ✓ Government office address found in PDF`);
+
     }
     
     if (!govPhoneFound) {
-      console.log(`    ❌ Government office phone not found in PDF`);
+
       // Try different phone formats
       const phoneVariants = [
         expectedInfo.governmentOfficePhone,
@@ -109,36 +109,36 @@ export class PdfVerifier {
       
       for (const variant of phoneVariants) {
         const variantFound = this.findTextInPdf(searchableText, variant);
-        console.log(`        Phone variant "${variant}": ${variantFound}`);
+
       }
     } else {
-      console.log(`    ✓ Government office phone found in PDF`);
+
     }
     
     // Verify community center information
-    console.log(`    Checking community center info:`);
-    console.log(`      Address: ${expectedInfo.communityCenterAddress}`);
-    console.log(`      Phone: ${expectedInfo.communityCenterPhone}`);
+
+
+
     
     const centerAddressFound = this.findTextInPdf(searchableText, expectedInfo.communityCenterAddress);
     const centerPhoneFound = this.findTextInPdf(searchableText, expectedInfo.communityCenterPhone);
     
     if (!centerAddressFound) {
-      console.log(`    ❌ Community center address not found in PDF`);
+
       // Log partial matches for debugging
       const addressParts = expectedInfo.communityCenterAddress.split(' ');
       for (const part of addressParts) {
         if (part.length > 3) {
           const partFound = this.findTextInPdf(searchableText, part);
-          console.log(`        Partial match "${part}": ${partFound}`);
+
         }
       }
     } else {
-      console.log(`    ✓ Community center address found in PDF`);
+
     }
     
     if (!centerPhoneFound) {
-      console.log(`    ❌ Community center phone not found in PDF`);
+
       // Try different phone formats
       const phoneVariants = [
         expectedInfo.communityCenterPhone,
@@ -149,21 +149,21 @@ export class PdfVerifier {
       
       for (const variant of phoneVariants) {
         const variantFound = this.findTextInPdf(searchableText, variant);
-        console.log(`        Phone variant "${variant}": ${variantFound}`);
+
       }
     } else {
-      console.log(`    ✓ Community center phone found in PDF`);
+
     }
     
     // Summary
     const foundCount = [govAddressFound, govPhoneFound, centerAddressFound, centerPhoneFound].filter(Boolean).length;
-    console.log(`    📊 Contact info verification: ${foundCount}/4 items found in PDF`);
+
     
     // For development purposes, let's be lenient and accept if at least some info is found
     if (foundCount >= 2) {
-      console.log(`    ✅ PDF contains sufficient contact information`);
+
     } else {
-      console.log(`    ⚠️  PDF may have limited contact information (${foundCount}/4 found)`);
+
     }
   }
 
@@ -209,10 +209,10 @@ export class PdfVerifier {
     try {
       if (fs.existsSync(filepath)) {
         fs.unlinkSync(filepath);
-        console.log(`    ✓ Cleaned up PDF file: ${filepath}`);
+
       }
     } catch (error) {
-      console.log(`    ⚠️  Could not cleanup PDF file: ${error}`);
+
     }
   }
 }

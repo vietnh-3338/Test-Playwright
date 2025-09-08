@@ -27,7 +27,7 @@ export default defineConfig({
   use: {
     headless: process.env.HEADLESS === 'true' ? true : false, // Default: show browser, set HEADLESS=true for headless
     /* Base URL to use in actions like `await page.goto('/')`. */
-    // baseURL: 'http://localhost:3000',
+    baseURL: 'https://dev-theotol.soudan-e65.com',
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',

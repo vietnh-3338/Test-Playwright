@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
-import { ShindangoNaviApp } from '../../pages/app.page';
-import { TEST_SCENARIOS, TestScenario, getApprovedScenarios, getNotAppliedScenarios } from '../../utils/testData';
+import { ShindangoNaviApp } from '../../pages/pages';
+import { TEST_SCENARIOS, TestScenario } from '../../utils/testData';
+import { getApprovedScenarios, getNotAppliedScenarios } from '../../utils/helpers';
 
 test.describe('Step 7: Data-Driven Review Page Testing', () => {
   let app: ShindangoNaviApp;
@@ -10,7 +11,7 @@ test.describe('Step 7: Data-Driven Review Page Testing', () => {
   });
 
   // Test all approved scenarios (those that reach Step 7 with care level)
-  const approvedScenarios = getApprovedScenarios();
+  const approvedScenarios = getApprovedScenarios(TEST_SCENARIOS);
   
   // Create individual test for each approved scenario
   for (const scenario of approvedScenarios) {
@@ -23,7 +24,7 @@ test.describe('Step 7: Data-Driven Review Page Testing', () => {
       
       // Verify review page is loaded
       console.log('  - Verifying review page elements...');
-      await app.step7.verifyAllReviewQuestionsDisplayed();
+      await app.step7.waitForReviewPageToLoad();
       
       const reviewTitle = app.page.getByText('入力内容を確認して下さい。');
       await expect(reviewTitle).toBeVisible({ timeout: 10000 });
@@ -73,7 +74,7 @@ test.describe('Step 7: Data-Driven Review Page Testing', () => {
   }
 
   // Test not-applied scenarios (those that skip Step 6)
-  const notAppliedScenarios = getNotAppliedScenarios();
+  const notAppliedScenarios = getNotAppliedScenarios(TEST_SCENARIOS);
   
   for (const scenario of notAppliedScenarios) {
     test(`Review Page (Not Applied): ${scenario.scenarioName}`, async () => {
@@ -138,8 +139,8 @@ test.describe('Step 7: Data-Driven Review Page Testing', () => {
     console.log('\n=== Test Data Coverage Summary ===');
     
     const allScenarios = TEST_SCENARIOS;
-    const approvedCount = getApprovedScenarios().length;
-    const notAppliedCount = getNotAppliedScenarios().length;
+    const approvedCount = getApprovedScenarios(TEST_SCENARIOS).length;
+    const notAppliedCount = getNotAppliedScenarios(TEST_SCENARIOS).length;
     
     console.log(`Total scenarios: ${allScenarios.length}`);
     console.log(`  - Approved (reach Step 6): ${approvedCount}`);
@@ -159,7 +160,7 @@ test.describe('Step 7: Data-Driven Review Page Testing', () => {
     console.log('\nStep 5 (Certification Status) Coverage:');
     step5Coverage.forEach(status => console.log(`  - ${status}`));
     
-    const approvedScenarios = getApprovedScenarios();
+    const approvedScenarios = getApprovedScenarios(TEST_SCENARIOS);
     if (approvedScenarios.length > 0) {
       const step6Coverage = [...new Set(approvedScenarios.map(s => s.step6Expected))];
       console.log('\nStep 6 (Care Level) Coverage (Approved only):');

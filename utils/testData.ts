@@ -99,26 +99,4 @@ export const TEST_SCENARIOS: TestScenario[] = [
   }
 ];
 
-// Helper function to get scenario by name
-export function getScenarioByName(name: string): TestScenario | undefined {
-  return TEST_SCENARIOS.find(scenario => scenario.scenarioName === name);
-}
-
-// Helper function to get scenarios by criteria
-export function getScenariosByCriteria(criteria: Partial<TestScenario>): TestScenario[] {
-  return TEST_SCENARIOS.filter(scenario => {
-    return Object.entries(criteria).every(([key, value]) => 
-      scenario[key as keyof TestScenario] === value
-    );
-  });
-}
-
-// Helper to get all approved scenarios (that reach step 6)
-export function getApprovedScenarios(): TestScenario[] {
-  return TEST_SCENARIOS.filter(scenario => scenario.step5Selection === 'approved');
-}
-
-// Helper to get all not-applied scenarios (that end at step 5)
-export function getNotAppliedScenarios(): TestScenario[] {
-  return TEST_SCENARIOS.filter(scenario => scenario.step5Selection === 'notApplied');
-}
+// Export only the data, helper functions moved to helpers.ts
