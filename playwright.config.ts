@@ -25,7 +25,7 @@ export default defineConfig({
   reporter: 'html',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
-    headless: false,
+    headless: process.env.HEADLESS === 'true' ? true : false, // Default: show browser, set HEADLESS=true for headless
     /* Base URL to use in actions like `await page.goto('/')`. */
     // baseURL: 'http://localhost:3000',
 
@@ -44,7 +44,10 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
 
-
+    // {
+    //   name: 'iphone-12-pro',
+    //   use: { ...devices['iPhone 12 Pro'] },
+    // },
 
     /* Test against mobile viewports. */
     // {
