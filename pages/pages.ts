@@ -1186,7 +1186,7 @@ export class ShindangoNaviApp {
   /**
    * Complete workflow to Step 7 review page
    */
-  async completeToStep7(careLevel: string = '要介護2'): Promise<void> {
+  async completeToStep7(careLevel: string = '要介護2', livingEnvironment: 'home' | 'facility' = 'home'): Promise<void> {
     await this.page.goto('/special/shindango-navi/tool');
     await this.page.waitForLoadState('networkidle');
     await this.step1.selectPersonalAnswer();
@@ -1199,7 +1199,12 @@ export class ShindangoNaviApp {
     await this.step3.enterAge('75');
     await this.step3.clickNext();
 
-    await this.step4.selectHomeAnswer();
+    // Select living environment based on parameter
+    if (livingEnvironment === 'home') {
+      await this.step4.selectHomeAnswer();
+    } else {
+      await this.step4.selectFacilityAnswer();
+    }
     await this.step4.clickNext();
 
     await this.step5.selectApprovedAnswer();

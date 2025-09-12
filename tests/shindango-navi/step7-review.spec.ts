@@ -3,7 +3,7 @@ import { ShindangoNaviApp } from '../../pages/pages';
 import { TEST_SCENARIOS, TestScenario } from '../../utils/testData';
 import { getApprovedScenarios, getNotAppliedScenarios } from '../../utils/helpers';
 
-test.describe('Step 7: Data-Driven Review Page Testing', () => {
+test.describe('Step 7: Review]', () => {
   let app: ShindangoNaviApp;
 
   test.beforeEach(async ({ page }) => {
